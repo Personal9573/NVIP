@@ -9,7 +9,7 @@ import com.mlm.utils.JDBCUtil;
 
 public class OneBuyServlet extends BaseServlet {
 	public void index(HttpServletRequest request,HttpServletResponse response){
-		String sql="select top 20 * from notice order by ptime desc";
+		String sql="select top 20 * from BuyWhat order by ptime desc";
 		JDBCUtil ju = new JDBCUtil();
 		String result=null;
 		try{
@@ -21,4 +21,15 @@ public class OneBuyServlet extends BaseServlet {
 		}
 		PrintUtils.sendMessageToPhone(response, result);
 	}
+	public void Order(HttpServletRequest request,HttpServletResponse response){
+		//判断是否满员
+			//未满员
+				//买家账户扣款+资金明细
+				//平台账户加款+资金明细
+				//生成购买记录
+				//更新商品数据（商品可购买次数-1）
+			//满员
+				//提示满员
+	}
+	
 }
