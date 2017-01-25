@@ -263,7 +263,13 @@ public class QdzsServlet extends BaseServlet {
 					}
 					else{
 						String conditions="";
-						List<Object[]> list=ju.QueryToListValue(sid_sql, new Object[]{u_ID},conn);
+						List<Object[]> list=ju.QueryToListValue(sid_sql, pramas,conn);
+						//商家黑名单
+						String ssql="select S_ID from SellerBlackList where B_ID=?";
+						List<Object[]> black_sid=ju.QueryToListValue(ssql, pramas, conn);
+						if(black_sid.size()!=0){
+							list.addAll(black_sid);
+						}
 						if(list.size()!=0){
 							for(int i=0;i<list.size();i++){
 								if(i==list.size()-1){
@@ -275,7 +281,6 @@ public class QdzsServlet extends BaseServlet {
 							}
 							conditions=" AND S_ID NOT IN ("+conditions+") ";
 						}
-						
 						
 						String sql="SELECT top 1 RWBH,GJCFB,RWLX FROM S_SumOrder WHERE "+rwlx+" (MSYJ between ? and ?)  and SYDS>0 and WFBDS>=0  "+conditions+" and "
 								+ "Charindex(convert(varchar(4),?),isNUll(S_SumOrder.SF,space(1)))=0 and (? between isnull(S_SumOrder.NL_L,0) "
