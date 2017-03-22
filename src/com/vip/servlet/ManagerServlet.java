@@ -13,8 +13,8 @@ import net.sf.json.JSONObject;
 
 import com.base.util.BaseServlet;
 import com.base.util.PrintUtils;
-import com.mlm.utils.JDBCUtil;
-import com.mlm.utils.JDBCuTest;
+import com.jdbc.utils.JDBCUtil;
+import com.jdbc.utils.JDBCuTest;
 
 @WebServlet(urlPatterns="/manage/*")
 public class ManagerServlet extends BaseServlet {

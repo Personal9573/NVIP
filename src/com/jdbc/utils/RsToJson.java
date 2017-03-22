@@ -1,4 +1,4 @@
-﻿package com.mlm.utils;
+﻿package com.jdbc.utils;
 
 
 import java.sql.ResultSet;

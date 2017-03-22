@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.base.util.BaseServlet;
 import com.base.util.PrintUtils;
-import com.mlm.utils.JDBCUtil;
+import com.jdbc.utils.JDBCUtil;
 
 public class OneBuyServlet extends BaseServlet {
 	public void index(HttpServletRequest request,HttpServletResponse response){

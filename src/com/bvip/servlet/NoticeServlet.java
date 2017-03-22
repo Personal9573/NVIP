@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.base.util.BaseServlet;
 import com.base.util.PrintUtils;
-import com.mlm.utils.JDBCUtil;
+import com.jdbc.utils.JDBCUtil;
 
 @WebServlet(urlPatterns="/notice/*")
 public class NoticeServlet extends BaseServlet {

@@ -13,9 +13,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.base.util.BaseServlet;
 import com.base.util.PrintUtils;
+import com.jdbc.utils.JDBCUtil;
+import com.jdbc.utils.JDBCuTest;
 import com.mlm.entity.UserReg;
-import com.mlm.utils.JDBCUtil;
-import com.mlm.utils.JDBCuTest;
 
 @WebServlet(urlPatterns="/qdzs/*")
 public class QdzsServlet extends BaseServlet {
@@ -232,9 +232,9 @@ public class QdzsServlet extends BaseServlet {
 				ret="1";
 			}
 			else{
-				String syds_sql="select MTRWDS,SJRSF,SJRNL,SJRXB,SJRXY,isnull(TQZ,0) as TQZ,isnull(GWPJ,0) as GWPJ from Buyer where B_ID=?";
+				String syds_sql="select MTRWDS,SJRSF,SJRNL,SJRXB,SJRXY,isnull(TQZ,0) as TQZ,isnull(GWPJ,0) as GWPJ,isnull(BSPL,0) as BSPL from Buyer where B_ID=?";
 				String rwlx;
-				String sid_sql="select distinct b.S_ID from dbo.v_XDSID b,S_Shop s where b.WWID=s.WWID and b.B_ID=? and datediff(day,b.XDSJ,getdate())<=isnull(s.JDJG,20)";
+				String sid_sql="select distinct b.S_ID from dbo.v_XDSID b,S_Shop s where b.WWID=s.WWID and b.B_ID=? and datediff(day,b.XDSJ,getdate())<=isnull(s.JDJG,20)";				
 				if(money.equals("0")){
 					if(computer.equals("0")){
 						rwlx=" RWLX='1' and ";
@@ -281,11 +281,21 @@ public class QdzsServlet extends BaseServlet {
 							}
 							conditions=" AND S_ID NOT IN ("+conditions+") ";
 						}
-						
 						String sql="SELECT top 1 RWBH,GJCFB,RWLX FROM S_SumOrder WHERE "+rwlx+" (MSYJ between ? and ?)  and SYDS>0 and WFBDS>=0  "+conditions+" and "
 								+ "Charindex(convert(varchar(4),?),isNUll(S_SumOrder.SF,space(1)))=0 and (? between isnull(S_SumOrder.NL_L,0) "
 								+ "and isnull(S_SumOrder.NL_H,100)) and Charindex(convert(varchar(1),?),isNUll(S_SumOrder.XB,'01'))!=0 and "
 								+ "?>=isnull(S_SumOrder.XY,0) and ?>=isnull(S_SumOrder.TQZ,0) and ?>=isnull(S_SumOrder.PJ,0) ORDER BY MSYJ desc ";
+						if(!money.equals("0") && !new BigDecimal(buyer_info[7].toString()).equals(new BigDecimal("0"))){
+							sql="SELECT top 1 RWBH,GJCFB,RWLX FROM S_SumOrder WHERE "+rwlx+" (MSYJ between ? and ?)  and SYDS>0 and WFBDS>=0  "+conditions+" and "
+									+ "Charindex(convert(varchar(4),?),isNUll(S_SumOrder.SF,space(1)))=0 and (? between isnull(S_SumOrder.NL_L,0) "
+									+ "and isnull(S_SumOrder.NL_H,100)) and Charindex(convert(varchar(1),?),isNUll(S_SumOrder.XB,'01'))!=0 and "
+									+ "?>=isnull(S_SumOrder.XY,0) and ?>=isnull(S_SumOrder.TQZ,0) and ?>=isnull(S_SumOrder.PJ,0) and isnull(S_SumOrder.CH,0)=0 ORDER BY MSYJ desc ";
+						}
+/*						
+						String sql="SELECT top 1 RWBH,GJCFB,RWLX FROM S_SumOrder WHERE "+rwlx+" (MSYJ between ? and ?)  and SYDS>0 and WFBDS>=0  "+conditions+" and "
+								+ "Charindex(convert(varchar(4),?),isNUll(S_SumOrder.SF,space(1)))=0 and (? between isnull(S_SumOrder.NL_L,0) "
+								+ "and isnull(S_SumOrder.NL_H,100)) and Charindex(convert(varchar(1),?),isNUll(S_SumOrder.XB,'01'))!=0 and "
+								+ "?>=isnull(S_SumOrder.XY,0) and ?>=isnull(S_SumOrder.TQZ,0) and ?>=isnull(S_SumOrder.PJ,0) ORDER BY MSYJ desc ";*/
 						Object[] task_info=ju.QueryToValue(sql, new Object[]{min,max,buyer_info[1],buyer_info[2],buyer_info[3],buyer_info[4],buyer_info[5],buyer_info[6]}, conn);
 						if(task_info.length!=0){
 							count=pro_place(conn,u_ID,task_info);
