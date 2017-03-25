@@ -308,6 +308,7 @@ public class QdzsServlet extends BaseServlet {
 		catch(Exception e){
 			conn.rollback();
 			ret="服务器异常,联系发哥.err-code:000";
+			e.printStackTrace();
 		}
 		finally{
 			if(count>0){
@@ -333,7 +334,7 @@ public class QdzsServlet extends BaseServlet {
 		Object[] Bid_Params={B_ID};
 		String sql="select B_ID from blacklist where B_ID=?";
 		boolean in_blacklist=ju.queryhas(sql, Bid_Params, conn);
-		if(in_blacklist){
+		if(in_blacklist && !"16".contains(task_info[2].toString())){
 			return -1;
 		}
 		sql="SELECT TOP 1 DDBH FROM B_Order WHERE RWBH=? AND GJCFB=? AND DDZT='8' AND RWLX=?";
